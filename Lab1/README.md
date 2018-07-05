@@ -1,4 +1,4 @@
-## Lab1 Goal
+## Lab1
 
 Be familiar with parallel programming environment
 
