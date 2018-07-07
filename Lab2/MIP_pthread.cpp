@@ -13,7 +13,7 @@ File -(FileToArray)> Array -(MIP)> Array -(ArrayToRGB)> RGB -(svpng)> File */
 
 int main(int argc, char const *argv[])
 {
-    int array[5][5] = {{1,1,1,1,1},{0,1,0,1,0},{0},{0},{0}};
+    int array[5][5] = {{0,1,1,1,1},{0,1,0,1,0},{0},{0},{0}};
     /* test ArrayToRGB */
     unsigned char *rgb = ArrayToRGB((int*)array,5,5);
     /* test RGBToArray */
@@ -28,7 +28,12 @@ int main(int argc, char const *argv[])
 
     fp = fopen("rgb.png","rb");
     int width,height;
-    FileToArray(fp,width,height);
+    a = FileToArray(fp,width,height);
+    printf("w: %d, h: %d\n",width,height);
+    for(int i = 0; i < width*height; i++){
+        printf("%d ",a[i]);
+    }
+    printf("\n");
     fclose(fp);
     return 0;
 }
@@ -72,10 +77,13 @@ int *FileToArray(FILE* fp, int& width, int& height){
     rewind(fp);
     unsigned char *buffer = new unsigned char[fsize];
     fread(buffer,1,fsize,fp);
-    for(int i = 0; i < 100; i++){
-        printf("%d ",buffer[i]);
+    width = buffer[19];
+    height = buffer[23];
+    int *res = new int[width*height];
+    for(int i = 0; i < height; i++){
+        for(int k = 0; k < width; k++){
+            res[i*width+k] = !(buffer[49+i*(width*3+1+5)+3*k]/255);
+        }
     }
-    printf("\n");
-    int *res = NULL;
     return res;
 }
