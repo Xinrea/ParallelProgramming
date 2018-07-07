@@ -1,5 +1,6 @@
-MIP_pthread: MIP_pthread.cpp
-	g++ -o MIP_pthread MIP_pthread.cpp -lpthread
-
+MIP_pthread: MIP_pthread.cpp pngfunc.cpp
+	g++ -o MIP_pthread MIP_pthread.cpp pngfunc.cpp -lpthread
+SEcreator: SEcreator.cpp pngfunc.cpp
+	g++ -o SEcreator SEcreator.cpp pngfunc.cpp
 clean:
-	rm MIP_pthread *.png
+	rm MIP_pthread SEcreator *.png
