@@ -22,9 +22,10 @@ int main(int argc, char const *argv[])
         }
     }
     unsigned char *img = ArrayToRGB(a,width,height);
-    char fullname[40] = "Output/";
+    char fullname[40] = "StructuringElements/";
     strcat(fullname,filename);
     FILE *fp = fopen(fullname,"wb");
     svpng(fp,width,height,img,0);
+    fclose(fp);
     return 0;
 }
