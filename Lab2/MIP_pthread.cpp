@@ -3,33 +3,37 @@
 
 #include "svpng.inc"
 #include "pngfunc.h"
+#include "mipop.h"
+#include <cstring>
 #include <cstdio>
 /* Basic processing:
 File -(FileToArray)> Array -(MIP)> Array -(ArrayToRGB)> RGB -(svpng)> File */
 
 int main(int argc, char const *argv[])
 {
-    int array[6][6] = {{0,1,1,1,1,0},{0,1,0,1,0,1},{0},{0},{0},{0}};
-    /* test ArrayToRGB */
-    unsigned char *rgb = ArrayToRGB((int*)array,6,6);
-    /* test RGBToArray */
-    int *a = RGBToArray(rgb,6,6);
-    for(int i = 0; i < 36; i++){
-        printf("%d ",a[i]);
-    }
-    printf("\n");
-    FILE *fp = fopen("rgb.png", "wb");
-    svpng(fp, 6, 6, rgb, 0);
-    fclose(fp);
+    //image to be processed
+    printf("Input Filename: ");
+    char infilename[30];
+    scanf("%s",infilename);
+    char in[40] = "Input/";
+    strcat(in,infilename);
+    //structuring elements
+    printf("Input SE: ");
+    char SEfilename[30];
+    scanf("%s",SEfilename);
+    char se[40] = "StructuringElements/";
+    strcat(se,SEfilename);
 
-    fp = fopen("rgb.png","rb");
-    int width,height;
-    a = FileToArray(fp,width,height);
-    printf("w: %d, h: %d\n",width,height);
-    for(int i = 0; i < width*height; i++){
-        printf("%d ",a[i]);
-    }
-    printf("\n");
-    fclose(fp);
+    FILE *fpin = fopen(in,"rb");
+    int width, height;
+    int *inArray = FileToArray(fpin, width, height);
+
+    FILE *fpse = fopen(se,"rb");
+    int se_width,se_height;
+    int *seArray = FileToArray(fpse, se_width, se_height);
+
+    MIPerosion(inArray, seArray, width, height, se_width, se_height);
+    fclose(fpse);
+    fclose(fpin);
     return 0;
 }
