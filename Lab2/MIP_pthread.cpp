@@ -23,6 +23,9 @@ int main(int argc, char const *argv[])
     scanf("%s",SEfilename);
     char se[40] = "StructuringElements/";
     strcat(se,SEfilename);
+    char outfile[40] = "Output/";
+    strcat(outfile,infilename);
+    strcat(outfile,"_erosion.png");
 
     FILE *fpin = fopen(in,"rb");
     int width, height;
@@ -32,8 +35,13 @@ int main(int argc, char const *argv[])
     int se_width,se_height;
     int *seArray = FileToArray(fpse, se_width, se_height);
 
-    MIPerosion(inArray, seArray, width, height, se_width, se_height);
+    int *out = MIPerosion(inArray, seArray, width, height, se_width, se_height);
+    unsigned char* outRGB = ArrayToRGB(out,width,height);
+
+    FILE *fpout = fopen(outfile,"wb");
+    svpng(fpout,width,height,outRGB,0);
     fclose(fpse);
     fclose(fpin);
+    fclose(fpout);
     return 0;
 }
